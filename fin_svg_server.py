@@ -15,6 +15,7 @@ HTML = """
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fin SVG Generator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,28 +33,29 @@ body{
   background:var(--bg);
   display:flex;
   justify-content:center;
-  align-items:flex-start;
+  align-items:center;
   min-height:100vh;
-  padding:2rem;
+  padding:1rem;
 }
 .card{
   background:var(--card);
   border:1px solid var(--border);
   border-radius:12px;
-  padding:2rem 2.5rem;
+  padding:1.5rem;
   box-shadow:0 4px 14px rgba(0,0,0,.06);
-  width:clamp(320px,90vw,480px);
+  width:clamp(300px,90vw,480px);
 }
 h1{font-size:1.4rem;margin-bottom:1rem;color:#111}
 form label{
   display:flex;
   justify-content:space-between;
+  align-items:center;
   margin:.55rem 0;
   font-size:.95rem;
 }
 form input{
   width:7.3rem;
-  padding:.35rem .5rem;
+  padding:.45rem .5rem;
   border:1px solid var(--border);
   border-radius:6px;
   font-size:.95rem;
@@ -92,6 +94,24 @@ a.download{
   text-decoration:none;
 }
 a.download:hover{text-decoration:underline}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 1rem;
+  }
+  h1 {
+    font-size: 1.2rem;
+  }
+  form label {
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0.8rem 0;
+  }
+  form input {
+    width: 100%;
+    margin-top: 0.3rem;
+  }
+}
 </style>
 </head>
 <body>
@@ -99,12 +119,10 @@ a.download:hover{text-decoration:underline}
     <h1>Fin Outline ➜ SVG</h1>
 
     <form id="f">
-      <label>Root chord&nbsp;<input type="number" id="rc" step="any" value="1.1"></label>
-      <label>Tip&nbsp;chord&nbsp;&nbsp;<input type="number" id="tc" step="any" value="0.3"></label>
-      <label>Height&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="number" id="h"  step="any" value="2.4"></label>
-      <label>Sweep length<input type="number" id="sw" step="any" value="-1.146"></label>
-      <label>Margin&nbsp;(opt.)<input type="number" id="m"  step="any" value="0.2"></label>
-      <button type="submit">Generate</button>
+      <label>Root chord&nbsp;<input type="number" id="rc" step="0.1" value="1.1"></label>
+      <label>Tip&nbsp;chord&nbsp;&nbsp;<input type="number" id="tc" step="0.1" value="0.3"></label>
+      <label>Height&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="number" id="h"  step="0.1" value="2.4"></label>
+      <label>Sweep length<input type="number" id="sw" step="0.1" value="-1.146"></label>
     </form>
 
     <div id="msg"></div>
@@ -127,11 +145,10 @@ function buildSVG(rc, tc, h, sw, margin){
 </svg>`;
 }
 
-document.getElementById('f').addEventListener('submit',e=>{
-  e.preventDefault();
+function generateSVG(){
   const rc=parseFloat(rc_in.value), tc=parseFloat(tc_in.value),
         h =parseFloat(h_in.value),  sw=parseFloat(sw_in.value),
-        m =parseFloat(m_in.value)||0;
+        m = 0.2; // Fixed margin value
   if([rc,tc,h,sw].some(isNaN)){
     msg.textContent='❌ Please enter valid numbers.'; return;
   }
@@ -142,16 +159,24 @@ document.getElementById('f').addEventListener('submit',e=>{
   dlink.href=url;
   dlink.download=`fin_${Date.now()}.svg`;
   dlink.hidden=false;
-  msg.textContent='✅ SVG generated – preview below.';
-});
+  msg.textContent='';
+}
+
 const rc_in=document.getElementById('rc'),
       tc_in=document.getElementById('tc'),
       h_in =document.getElementById('h'),
       sw_in=document.getElementById('sw'),
-      m_in =document.getElementById('m'),
       msg  =document.getElementById('msg'),
       preview=document.getElementById('preview'),
       dlink=document.getElementById('dlink');
+
+// Add event listeners to all inputs
+[rc_in, tc_in, h_in, sw_in].forEach(input => {
+  input.addEventListener('input', generateSVG);
+});
+
+// Generate SVG on page load
+window.addEventListener('load', generateSVG);
 </script>
 </body>
 </html>

@@ -119,10 +119,10 @@ a.download:hover{text-decoration:underline}
     <h1>Fin Outline ➜ SVG</h1>
 
     <form id="f">
-      <label>Root chord&nbsp;<input type="number" id="rc" step="0.1" value="1.1"></label>
-      <label>Tip&nbsp;chord&nbsp;&nbsp;<input type="number" id="tc" step="0.1" value="0.3"></label>
-      <label>Height&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="number" id="h"  step="0.1" value="2.4"></label>
-      <label>Sweep length<input type="number" id="sw" step="0.1" value="-1.146"></label>
+      <label>Root chord (in)&nbsp;<input type="number" id="rc" step="0.1" value="1.1"></label>
+      <label>Tip&nbsp;chord (in)&nbsp;&nbsp;<input type="number" id="tc" step="0.1" value="0.3"></label>
+      <label>Height (in)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="number" id="h"  step="0.1" value="2.4"></label>
+      <label>Sweep length (in)<input type="number" id="sw" step="0.1" value="-1.146"></label>
     </form>
 
     <div id="msg"></div>

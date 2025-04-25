@@ -119,10 +119,10 @@ a.download:hover{text-decoration:underline}
     <h1>Fin Outline ➜ SVG</h1>
 
     <form id="f">
-      <label>Root chord (in)&nbsp;<input type="number" id="rc" step="0.1" value="1.1"></label>
-      <label>Tip&nbsp;chord (in)&nbsp;&nbsp;<input type="number" id="tc" step="0.1" value="0.3"></label>
-      <label>Height (in)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="number" id="h"  step="0.1" value="2.4"></label>
-      <label>Sweep length (in)<input type="number" id="sw" step="0.1" value="-1.146"></label>
+      <label>Root chord (mm)&nbsp;<input type="number" id="rc" step="1" value="28"></label>
+      <label>Tip&nbsp;chord (mm)&nbsp;&nbsp;<input type="number" id="tc" step="1" value="8"></label>
+      <label>Height (mm)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="number" id="h"  step="1" value="61"></label>
+      <label>Sweep length (mm)<input type="number" id="sw" step="1" value="-29"></label>
     </form>
 
     <div id="msg"></div>
@@ -132,6 +132,14 @@ a.download:hover{text-decoration:underline}
 
 <script>
 function buildSVG(rc, tc, h, sw, margin){
+  // Convert mm to inches
+  const mmToInch = 0.0393701;
+  rc *= mmToInch;
+  tc *= mmToInch;
+  h *= mmToInch;
+  sw *= mmToInch;
+  margin *= mmToInch;
+  
   const pts=[[0,0],[rc,0],[sw+tc,h],[sw,h]];
   const minX=Math.min(...pts.map(p=>p[0])),
         minY=Math.min(...pts.map(p=>p[1]));
@@ -148,7 +156,7 @@ function buildSVG(rc, tc, h, sw, margin){
 function generateSVG(){
   const rc=parseFloat(rc_in.value), tc=parseFloat(tc_in.value),
         h =parseFloat(h_in.value),  sw=parseFloat(sw_in.value),
-        m = 0.2; // Fixed margin value
+        m = 5; // Margin in mm (was 0.2 inches)
   if([rc,tc,h,sw].some(isNaN)){
     msg.textContent='❌ Please enter valid numbers.'; return;
   }
